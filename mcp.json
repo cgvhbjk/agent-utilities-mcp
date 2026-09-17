@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "agent-utilities": {
+      "command": "node",
+      "args": ["${CURSOR_PLUGIN_ROOT}/agent-utilities-mcp.mjs"],
+      "env": { "AGENT_UTILITIES_API_KEY": "${AGENT_UTILITIES_API_KEY}" }
+    }
+  }
+}

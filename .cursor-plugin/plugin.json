@@ -1,0 +1,24 @@
+{
+  "name": "agent-utilities",
+  "displayName": "Agent Utilities",
+  "version": "0.2.1",
+  "description": "Prepaid HTML, JSON and shopping-data APIs through local MCP. Free discovery; calls from $0.0003, funded with $5 credit packs.",
+  "author": { "name": "Agent Utilities" },
+  "homepage": "https://agent-utilities.agent-utilities.workers.dev/integrations/mcp",
+  "repository": "https://github.com/cgvhbjk/agent-utilities-mcp",
+  "license": "MIT",
+  "keywords": ["mcp", "agents", "commerce", "html", "json"],
+  "logo": "assets/logo.svg",
+  "mcpServers": "mcp.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "AGENT_UTILITIES_API_KEY": {
+        "type": "string",
+        "title": "Agent Utilities API key",
+        "description": "Leave empty for free discovery. For paid calls, configure only an au_live_ or au_test_ API key privately, never an account recovery credential.",
+        "default": ""
+      }
+    }
+  }
+}

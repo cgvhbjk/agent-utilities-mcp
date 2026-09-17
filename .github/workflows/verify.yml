@@ -16,6 +16,7 @@ jobs:
       - run: npm run build
       - run: sha256sum -c agent-utilities-mcp.mjs.sha256
       - run: node verify.mjs
+      - run: node verify-cursor.mjs
       - run: node verify-examples.mjs
       - uses: actions/setup-python@v5
         with:
