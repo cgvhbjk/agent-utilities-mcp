@@ -16,18 +16,18 @@ Clone the public repository into a folder under `~/.cursor/plugins/local/agent-u
 
 ## Standalone config for directory install links
 
-A directory's “Add to Cursor” link may install only an MCP configuration, without downloading the plugin repository. Do not use `CURSOR_PLUGIN_ROOT` in that context. This separately verified config installs the standalone adapter from a pinned public Git commit through npm's GitHub support:
+A directory's “Add to Cursor” link may install only an MCP configuration, without downloading the plugin repository. Do not use `CURSOR_PLUGIN_ROOT` in that context. This separately verified config installs the standalone adapter from a GitHub source archive pinned to a public commit:
 
 ```json
 {
   "command": "npx",
   "args": [
     "--yes",
-    "--package=git+https://github.com/cgvhbjk/agent-utilities-mcp.git#09d4673c0a057cf1201649646fb1154f83106994",
+    "--package=https://github.com/cgvhbjk/agent-utilities-mcp/archive/09d4673c0a057cf1201649646fb1154f83106994.tar.gz",
     "agent-utilities-mcp"
   ],
   "env": { "AGENT_UTILITIES_API_KEY": "" }
 }
 ```
 
-This requires Node.js 22+, npm/npx, Git and network access. It downloads code from the public GitHub repository, not an npm registry release. The commit is the source of the v0.3.0 release. Tool discovery follows the current service catalog. The empty key intentionally permits free discovery only; set a valid key privately in the client's configuration for paid execution. Keep approvals enabled. This standalone config was launched successfully through the MCP SDK with no paid requests; the directory UI and Cursor application have not been tested end to end.
+This requires Node.js 22+, npm/npx and network access. It downloads code from the public GitHub repository, not an npm registry release. The commit is the source of the v0.3.0 release. Tool discovery follows the current service catalog. The empty key intentionally permits free discovery only; set a valid key privately in the client's configuration for paid execution. Keep approvals enabled. This standalone config was launched successfully through the MCP SDK with no paid requests; the directory UI and Cursor application have not been tested end to end.

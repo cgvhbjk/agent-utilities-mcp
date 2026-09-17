@@ -1,6 +1,6 @@
 # Agent Utilities in VS Code
 
-Use Agent Utilities with VS Code's built-in MCP support and a chat session that supports MCP tools. Node.js 22+, npm/npx and Git must be on the machine where the server runs. The configuration downloads the standalone adapter from the immutable GitHub source of release 0.3.0. It does not install an npm registry package.
+Use Agent Utilities with VS Code's built-in MCP support and a chat session that supports MCP tools. Node.js 22+ and npm/npx must be on the machine where the server runs. The configuration downloads the standalone adapter from a GitHub source archive pinned to release 0.3.0's commit. It does not install an npm registry package.
 
 ## Install
 
@@ -22,7 +22,7 @@ For an uncertain result, preserve the returned request ID and original input. Us
 
 ## Compatibility and verification
 
-This configuration targets VS Code's built-in MCP support. It does not configure separate third-party chat extensions. VS Code documents that interactive input variables are not forwarded to Agent Host sessions; use a supported built-in session for this prompted setup. Browser-only clients also need an environment capable of launching the local Node.js process. For remote workspaces, install Node/npm/Git where the MCP server will actually run.
+This configuration targets VS Code's built-in MCP support. It does not configure separate third-party chat extensions. VS Code documents that interactive input variables are not forwarded to Agent Host sessions; use a supported built-in session for this prompted setup. Browser-only clients also need an environment capable of launching the local Node.js process. For remote workspaces, install Node/npm where the MCP server will actually run.
 
 The encoded link, configuration fields and pinned command are checked. The official MCP SDK verifies startup, tool discovery and rejection of execution without an API key. Actual VS Code application installation and chat execution have not been tested; no VS Code Marketplace listing or endorsement is claimed. No live paid requests are used for these checks.
 

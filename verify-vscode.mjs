@@ -16,7 +16,7 @@ assert.deepEqual(Object.keys(server), ['type', 'command', 'args', 'env']);
 assert.equal(server.type, 'stdio');
 assert.equal(server.command, 'npx');
 assert.equal(server.env.AGENT_UTILITIES_API_KEY, '${input:' + input.id + '}');
-assert.deepEqual(server.args, ['--yes', '--package=git+https://github.com/cgvhbjk/agent-utilities-mcp.git#09d4673c0a057cf1201649646fb1154f83106994', 'agent-utilities-mcp']);
+assert.deepEqual(server.args, ['--yes', '--package=https://github.com/cgvhbjk/agent-utilities-mcp/archive/09d4673c0a057cf1201649646fb1154f83106994.tar.gz', 'agent-utilities-mcp']);
 // Resolve the documented empty private input for a no-key subprocess check.
 // This does not emulate VS Code's trust dialog or its credential storage.
 const transport = new StdioClientTransport({ command: server.command, args: server.args,
