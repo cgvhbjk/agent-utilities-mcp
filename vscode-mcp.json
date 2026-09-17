@@ -1,0 +1,25 @@
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "agent-utilities-api-key",
+      "description": "Agent Utilities API key (leave empty for free discovery)",
+      "password": true,
+      "default": ""
+    }
+  ],
+  "servers": {
+    "agent-utilities": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "--yes",
+        "--package=git+https://github.com/cgvhbjk/agent-utilities-mcp.git#09d4673c0a057cf1201649646fb1154f83106994",
+        "agent-utilities-mcp"
+      ],
+      "env": {
+        "AGENT_UTILITIES_API_KEY": "${input:agent-utilities-api-key}"
+      }
+    }
+  }
+}
