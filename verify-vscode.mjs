@@ -20,7 +20,7 @@ assert.deepEqual(server.args, ['--yes', '--package=git+https://github.com/cgvhbj
 // Resolve the documented empty private input for a no-key subprocess check.
 // This does not emulate VS Code's trust dialog or its credential storage.
 const transport = new StdioClientTransport({ command: server.command, args: server.args,
-  env: { PATH: process.env.PATH, HOME: process.env.HOME, AGENT_UTILITIES_API_KEY: input.default }, stderr: 'pipe' });
+  env: { PATH: process.env.PATH, HOME: process.env.HOME, AGENT_UTILITIES_API_KEY: input.default }, stderr: 'inherit' });
 const client = new Client({ name: 'vscode-config-verification', version: '1' });
 try {
   await client.connect(transport);
