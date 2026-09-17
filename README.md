@@ -1,6 +1,6 @@
 # Agent Utilities MCP
 
-Connect a local stdio MCP client to 30 paid utility APIs for HTML extraction, JSON validation, agent configuration checks and product data. This MIT-licensed adapter runs locally; the hosted API is a paid service.
+Connect a local stdio MCP client to 33 paid utility APIs for HTML extraction, JSON validation, agent configuration checks and product data. This MIT-licensed adapter runs locally; the hosted API is a paid service.
 
 [Tool catalog](https://agent-utilities.agent-utilities.workers.dev/tools) · [Installation guide](https://agent-utilities.agent-utilities.workers.dev/integrations/mcp) · [Pricing](https://agent-utilities.agent-utilities.workers.dev/pricing) · [Policies and support](https://agent-utilities.agent-utilities.workers.dev/policies)
 
@@ -37,7 +37,7 @@ Omit the key to discover tools without spending credits. Obtain an API key and s
 ## What it does
 
 - Fetches the public tool definitions and current per-call prices on startup.
-- Exposes the 30 service tools and one recovery helper. The recovery helper is not an additional product.
+- Exposes the 33 service tools and one recovery helper. The recovery helper is not an additional product.
 - Sends authenticated calls only to the fixed Agent Utilities origin; redirects are rejected.
 - Generates a stable debit request ID and retries one failed HTTP exchange with the identical body and ID.
 - Keeps request identities and input hashes in process memory, without logging inputs, results or credentials. Remote data handling is described in the service policies.
