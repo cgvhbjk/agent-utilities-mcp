@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - run: python -m unittest discover -s examples/python -p test_client.py
-      - run: cd examples/python && sha256sum -c agent_utilities.py.sha256 && sha256sum -c agent_utilities_example.py.sha256 && python agent_utilities_example.py
+      - run: python -m unittest discover -s examples/python -p 'test_*.py'
+      - run: cd examples/python && sha256sum -c agent_utilities.py.sha256 && sha256sum -c agent_utilities_example.py.sha256 && sha256sum -c pack_plan_example.py.sha256 && sha256sum -c pack_plan_cases.json.sha256 && python agent_utilities_example.py && python pack_plan_example.py
       - run: docker build -t agent-utilities-mcp .
       - run: node verify.mjs --docker

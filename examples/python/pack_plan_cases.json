@@ -1,0 +1,109 @@
+{
+  "unit-price-trap": {
+    "input": {
+      "currency": "USD",
+      "minorUnitDigits": 2,
+      "requiredUnits": 12,
+      "offers": [
+        {
+          "id": "six-pack",
+          "unitsPerPack": 6,
+          "price": "7.99",
+          "maxPacks": 10
+        },
+        {
+          "id": "ten-pack",
+          "unitsPerPack": 10,
+          "price": "11.99",
+          "maxPacks": 10
+        }
+      ]
+    },
+    "expected": {
+      "feasible": true,
+      "itemSubtotal": "15.98",
+      "totalUnits": 12,
+      "excessUnits": 0,
+      "packCount": 2,
+      "lines": [
+        {
+          "id": "six-pack",
+          "packs": 2,
+          "units": 12,
+          "lineSubtotal": "15.98"
+        }
+      ]
+    }
+  },
+  "limited-stock": {
+    "input": {
+      "currency": "USD",
+      "minorUnitDigits": 2,
+      "requiredUnits": 12,
+      "offers": [
+        {
+          "id": "six-pack",
+          "unitsPerPack": 6,
+          "price": "7.99",
+          "maxPacks": 1
+        },
+        {
+          "id": "ten-pack",
+          "unitsPerPack": 10,
+          "price": "11.99",
+          "maxPacks": 1
+        }
+      ]
+    },
+    "expected": {
+      "feasible": true,
+      "itemSubtotal": "19.98",
+      "totalUnits": 16,
+      "excessUnits": 4,
+      "packCount": 2,
+      "lines": [
+        {
+          "id": "six-pack",
+          "packs": 1,
+          "units": 6,
+          "lineSubtotal": "7.99"
+        },
+        {
+          "id": "ten-pack",
+          "packs": 1,
+          "units": 10,
+          "lineSubtotal": "11.99"
+        }
+      ]
+    }
+  },
+  "insufficient-stock": {
+    "input": {
+      "currency": "USD",
+      "minorUnitDigits": 2,
+      "requiredUnits": 12,
+      "offers": [
+        {
+          "id": "six-pack",
+          "unitsPerPack": 6,
+          "price": "7.99",
+          "maxPacks": 1
+        },
+        {
+          "id": "ten-pack",
+          "unitsPerPack": 10,
+          "price": "11.99",
+          "maxPacks": 0
+        }
+      ]
+    },
+    "expected": {
+      "feasible": false,
+      "itemSubtotal": null,
+      "totalUnits": null,
+      "excessUnits": null,
+      "packCount": null,
+      "lines": []
+    }
+  }
+}

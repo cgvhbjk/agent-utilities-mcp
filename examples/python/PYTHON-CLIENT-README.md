@@ -62,3 +62,21 @@ If the outcome remains uncertain, preserve the `CallError.call` object. Retry wi
 For recovery after a process restart, supply the original `request_id` to `prepare_call` with the same tool, input and ceiling. Persist these values privately before executing if your application needs crash recovery. They can contain sensitive input. The library does not write a journal or store credentials on disk, and it cannot recover an ID your application lost.
 
 A ceiling of zero permits recovery of a matching existing reservation without authorizing a new debit. It does not refund or cancel a previous charge. Server recovery still binds the same tool version, price and input. Read the [developer quickstart](https://agent-utilities.agent-utilities.workers.dev/quickstart) for service limits and recovery details.
+
+## Shopping example: choose whole packs
+
+Download [pack_plan_example.py](https://agent-utilities.agent-utilities.workers.dev/downloads/pack_plan_example.py), [pack_plan_cases.json](https://agent-utilities.agent-utilities.workers.dev/downloads/pack_plan_cases.json) and their [script checksum](https://agent-utilities.agent-utilities.workers.dev/downloads/pack_plan_example.py.sha256) and [data checksum](https://agent-utilities.agent-utilities.workers.dev/downloads/pack_plan_cases.json.sha256). Keep them beside `agent_utilities.py`. They are also in the public repository's `examples/python` directory.
+
+```sh
+shasum -a 256 -c pack_plan_example.py.sha256
+shasum -a 256 -c pack_plan_cases.json.sha256
+python3 pack_plan_example.py
+python3 pack_plan_example.py --scenario limited-stock
+python3 pack_plan_example.py --scenario insufficient-stock
+```
+
+These commands make no network requests. They print fixed sample inputs and expected result subsets, not computed answers or evidence of a hosted execution. The three fixtures illustrate twelve interchangeable units: two six-packs cost $15.98; with only one six-pack available, a six-pack plus a ten-pack costs $19.98; with only one six-pack and no ten-packs available, the request is infeasible. Prices and inventory are fictional.
+
+To execute one selected scenario using existing credits, set `AGENT_UTILITIES_API_KEY` privately and add `--execute`. A new call is capped at $0.0008. A valid infeasible result is also billable. Funding starts with a $5 credit pack, but no payment or account is needed to inspect these examples.
+
+The script prints the request ID and exact input before execution. Retain them privately if execution needs recovery; rerunning the script creates a new billable identity. Use the original ID and input with `prepare_call` and `Client.execute` as described above. The example does not buy credits or place orders, verify stock, or account for shipping, tax or product equivalence. See the [whole-pack workflow](https://agent-utilities.agent-utilities.workers.dev/use-cases/choose-whole-packs) before adapting it.
