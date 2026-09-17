@@ -6,7 +6,7 @@ The manifest follows [Cursor's plugin reference](https://cursor.com/docs/referen
 
 Leave the plugin's `AGENT_UTILITIES_API_KEY` variable empty for free tool discovery. For paid execution, configure an API key privately through the client's plugin settings. Never put the key into the repository or a shared project file, and never give the plugin your account recovery credential. Keep tool approvals enabled. Requests send inputs to Agent Utilities under its [data policy](https://agent-utilities.agent-utilities.workers.dev/policies).
 
-Hosted execution uses prepaid credits: individual calls cost $0.0003–$0.002 and funding starts with a $5 pack. The current bundled adapter (0.3.0) caps new debits at startup catalog prices and uses zero for manual recovery. It has no total session budget. The legacy pinned 0.2.1 command below lacks those protections; use HTTP/Python for explicit ceilings or install the current plugin bundle. It never buys credits, automatically tops up, or places merchant orders. Discovery alone spends nothing. Preserve returned request IDs and original arguments for ten-minute recovery; a new tool call is a new billable identity.
+Hosted execution uses prepaid credits: individual calls cost $0.0003–$0.002 and funding starts with a $5 pack. The current bundled adapter (0.3.0) caps new debits at startup catalog prices and uses zero for manual recovery. It has no total session budget. It never buys credits, automatically tops up, or places merchant orders. Discovery alone spends nothing. Preserve returned request IDs and original arguments for ten-minute recovery; a new tool call is a new billable identity.
 
 Local verification validates the manifest against Cursor's published schema and launches the actual configuration through the official MCP SDK after resolving the documented placeholders. It confirms discovery and rejection of paid execution without a key. This is a configuration/stdio test, not an observed Cursor application installation or marketplace approval. No official Cursor or community-directory listing is claimed until separately verified.
 
@@ -23,11 +23,11 @@ A directory's “Add to Cursor” link may install only an MCP configuration, wi
   "command": "npx",
   "args": [
     "--yes",
-    "--package=git+https://github.com/cgvhbjk/agent-utilities-mcp.git#cec21ca19d7b2b96a12c6e76ff5a820ab8ff395e",
+    "--package=git+https://github.com/cgvhbjk/agent-utilities-mcp.git#09d4673c0a057cf1201649646fb1154f83106994",
     "agent-utilities-mcp"
   ],
   "env": { "AGENT_UTILITIES_API_KEY": "" }
 }
 ```
 
-This requires Node.js 22+, npm/npx, Git and network access. It downloads code from the public GitHub repository, not an npm registry release. The commit is the source of the existing v0.2.1 release. Tool discovery follows the current service catalog. The empty key intentionally permits free discovery only; set a valid key privately in the client's configuration for paid execution. Keep approvals enabled. This standalone config was launched successfully through the MCP SDK with no paid requests; the directory UI and Cursor application have not been tested end to end.
+This requires Node.js 22+, npm/npx, Git and network access. It downloads code from the public GitHub repository, not an npm registry release. The commit is the source of the v0.3.0 release. Tool discovery follows the current service catalog. The empty key intentionally permits free discovery only; set a valid key privately in the client's configuration for paid execution. Keep approvals enabled. This standalone config was launched successfully through the MCP SDK with no paid requests; the directory UI and Cursor application have not been tested end to end.
