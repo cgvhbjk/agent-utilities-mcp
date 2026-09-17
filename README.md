@@ -6,6 +6,8 @@ Connect a local stdio MCP client to 35 paid utility APIs for HTML extraction, JS
 
 ## Install
 
+Also listed on [Smithery](https://smithery.ai/servers/benjaminhelfand/agent-utilities) as a local Node.js MCPB bundle. Its download matches the v0.2.1 GitHub artifact. Connect the adapter for the complete current tool schemas and prices; directory metadata is a discovery summary.
+
 For clients that support MCP bundles, download `agent-utilities-mcp-0.2.1.mcpb` and its checksum from the [v0.2.1 release](https://github.com/cgvhbjk/agent-utilities-mcp/releases/tag/v0.2.1). Verify the checksum before importing the bundle through your client's extension settings. It contains the adapter, manifest and license notices. The bundle is unsigned; the release checksum establishes file consistency, not an independent signature. Bundle schema and standalone execution are tested; installation in each desktop client is not verified.
 
 The bundle's optional **Agent Utilities API key** setting is marked sensitive. Leave it empty for free discovery, or enter only your API key to enable paid calls. Node.js 22+ is required; use a compatible runtime provided by your client or installed locally. If your client cannot import MCPB files, use the manual setup below.
