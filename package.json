@@ -1,6 +1,6 @@
 {
   "name": "@cgvhbjk/agent-utilities-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Local MCP adapter for paid Agent Utilities APIs with stable credit retry identities.",
   "type": "module",
   "license": "MIT",

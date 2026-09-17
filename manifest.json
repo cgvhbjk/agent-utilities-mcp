@@ -1,0 +1,46 @@
+{
+  "manifest_version": "0.3",
+  "name": "agent-utilities-mcp",
+  "display_name": "Agent Utilities",
+  "version": "0.2.1",
+  "description": "Paid utility APIs for HTML, JSON, shopping data and agent configuration, with credit-safe retries.",
+  "long_description": "Connect to Agent Utilities through a local MCP adapter. Discover tools without a key; execution requires prepaid service credits. Calls start at $0.0003 and credit packs cost $5 USD. The adapter handles stable debit request IDs and recovery without automatic top-ups or card purchases. Inputs are sent to the Agent Utilities service under its data policy. Review per-call prices and approve spending in your client. Keep your account recovery credential separate from the API key.",
+  "author": {
+    "name": "Agent Utilities",
+    "url": "https://agent-utilities.agent-utilities.workers.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cgvhbjk/agent-utilities-mcp.git"
+  },
+  "homepage": "https://agent-utilities.agent-utilities.workers.dev/integrations/mcp",
+  "documentation": "https://agent-utilities.agent-utilities.workers.dev/integrations/mcp",
+  "support": "https://agent-utilities.agent-utilities.workers.dev/policies",
+  "license": "MIT",
+  "privacy_policies": ["https://agent-utilities.agent-utilities.workers.dev/policies"],
+  "server": {
+    "type": "node",
+    "entry_point": "agent-utilities-mcp.mjs",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/agent-utilities-mcp.mjs"],
+      "env": { "AGENT_UTILITIES_API_KEY": "${user_config.api_key}" }
+    }
+  },
+  "tools_generated": true,
+  "keywords": ["agents", "commerce", "html", "json", "validation"],
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": { "node": ">=22.0.0" }
+  },
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "Agent Utilities API key",
+      "description": "Optional for discovery. Get an API key and prepaid credits at the Agent Utilities workspace. Enter only an au_live_ or au_test_ API key, never the account recovery key.",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    }
+  }
+}

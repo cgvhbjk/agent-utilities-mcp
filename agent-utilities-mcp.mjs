@@ -4149,14 +4149,13 @@ var require_fast_uri = __commonJS({
         if (!malformedIPLiteral) {
           malformedHost = canonicalizeHost(parsed, options, schemeHandler, isIP);
         }
-        if (uri.indexOf("%") !== -1 && parsed.host !== void 0 && !malformedIPLiteral) {
-          let host = isIP ? parsed.host : normalizePercentEncoding(parsed.host, true);
-          if (!isIP) {
-            host = normalizePercentEncoding(host.toLowerCase());
-          }
-          parsed.host = reescapeHostDelimiters(host, isIP);
-        }
         if (!schemeHandler || schemeHandler && !schemeHandler.skipNormalize) {
+          if (uri.indexOf("%") !== -1) {
+            if (parsed.host !== void 0 && !malformedIPLiteral) {
+              const host = isIP ? parsed.host : normalizePercentEncoding(parsed.host, true);
+              parsed.host = reescapeHostDelimiters(host, isIP);
+            }
+          }
           if (parsed.path) {
             parsed.path = normalizePathEncoding(parsed.path);
           }
@@ -12555,7 +12554,7 @@ var StdioServerTransport = class {
   }
 };
 
-// src/adapter.ts
+// src/mcp/adapter.ts
 import { createHash, randomUUID } from "node:crypto";
 
 // node_modules/@modelcontextprotocol/sdk/dist/esm/server/zod-compat.js
@@ -14291,7 +14290,7 @@ var Server = class extends Protocol {
   }
 };
 
-// src/adapter.ts
+// src/mcp/adapter.ts
 var SERVICE_ORIGIN = "https://agent-utilities.agent-utilities.workers.dev";
 var RETRY_TOOL = "agent_utilities_retry";
 var REQUEST_PATTERN = /^\d{13}_[A-Za-z0-9_-]{16,80}$/;
@@ -14329,7 +14328,7 @@ async function createAdapter(apiKey, transportFetch = fetch) {
   const catalog = ListToolsResultSchema.parse((await boundedJson(discovery)).result);
   if (catalog.nextCursor || catalog.tools.length > 500 || catalog.tools.some((t) => t.name === RETRY_TOOL)) throw new Error("Unsupported catalog. Update the adapter.");
   const names = new Set(catalog.tools.map((t) => t.name));
-  const server = new Server({ name: "agent-utilities", version: "0.2.0" }, { capabilities: { tools: {} }, instructions: "Paid tools spend prepaid Agent Utilities credits. Review prices and get user approval for spending. Each new tool call is a new billable operation. On uncertain outcomes use agent_utilities_retry with the returned requestId and unchanged name and arguments within ten minutes; never repeat as a new operation. No card purchases or automatic top-ups are available through this adapter." });
+  const server = new Server({ name: "agent-utilities", version: "0.2.1" }, { capabilities: { tools: {} }, instructions: "Paid tools spend prepaid Agent Utilities credits. Review prices and get user approval for spending. Each new tool call is a new billable operation. On uncertain outcomes use agent_utilities_retry with the returned requestId and unchanged name and arguments within ten minutes; never repeat as a new operation. No card purchases or automatic top-ups are available through this adapter." });
   const requests = /* @__PURE__ */ new Map();
   server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: [
     ...catalog.tools.map((t) => ({
@@ -14402,7 +14401,7 @@ async function createAdapter(apiKey, transportFetch = fetch) {
   return server;
 }
 
-// src/cli.ts
+// src/mcp/cli.ts
 try {
   const server = await createAdapter(process.env.AGENT_UTILITIES_API_KEY);
   await server.connect(new StdioServerTransport());

@@ -36,7 +36,7 @@ export async function createAdapter(apiKey?: string, transportFetch: typeof fetc
   const catalog = ListToolsResultSchema.parse((await boundedJson(discovery)).result);
   if (catalog.nextCursor || catalog.tools.length > 500 || catalog.tools.some(t => t.name === RETRY_TOOL)) throw new Error('Unsupported catalog. Update the adapter.');
   const names = new Set(catalog.tools.map(t => t.name));
-  const server = new Server({ name: 'agent-utilities', version: '0.2.0' }, { capabilities: { tools: {} }, instructions:
+  const server = new Server({ name: 'agent-utilities', version: '0.2.1' }, { capabilities: { tools: {} }, instructions:
     'Paid tools spend prepaid Agent Utilities credits. Review prices and get user approval for spending. Each new tool call is a new billable operation. On uncertain outcomes use agent_utilities_retry with the returned requestId and unchanged name and arguments within ten minutes; never repeat as a new operation. No card purchases or automatic top-ups are available through this adapter.' });
   // Remember identity, not raw inputs/results. Refuse overflow rather than forget an ID and risk another debit.
   const requests = new Map<string, { hash: string; id: string }>();
