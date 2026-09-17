@@ -17,5 +17,10 @@ jobs:
       - run: sha256sum -c agent-utilities-mcp.mjs.sha256
       - run: node verify.mjs
       - run: node verify-examples.mjs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: python -m unittest discover -s examples/python -p test_client.py
+      - run: cd examples/python && sha256sum -c agent_utilities.py.sha256 && sha256sum -c agent_utilities_example.py.sha256 && python agent_utilities_example.py
       - run: docker build -t agent-utilities-mcp .
       - run: node verify.mjs --docker

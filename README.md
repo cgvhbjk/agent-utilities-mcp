@@ -43,6 +43,10 @@ curl --fail --silent --show-error \
 
 These public GET endpoints support cross-origin browser reads. Tool execution remains paid. Custom HTTP clients can send `X-Max-Credit-Micro-Usd` to cap a new prepaid credit debit; read the [quickstart](https://agent-utilities.agent-utilities.workers.dev/quickstart) for retry semantics. The generic stdio adapter does not set that optional header automatically.
 
+## Prefer Python?
+
+The [Python HTTP client](https://agent-utilities.agent-utilities.workers.dev/integrations/python) uses only Python 3.10+ standard libraries. See [examples/python](https://github.com/cgvhbjk/agent-utilities-mcp/tree/main/examples/python) for offline preview, free discovery and explicit paid calls with per-call ceilings and stable retry identities. No Node or MCP process is required for this route. It is separate from the MCPB bundle.
+
 ## Install
 
 Also listed on [Smithery](https://smithery.ai/servers/benjaminhelfand/agent-utilities) as a local Node.js MCPB bundle. Its download matches the v0.2.1 GitHub artifact. Connect the adapter for the complete current tool schemas and prices; directory metadata is a discovery summary.
