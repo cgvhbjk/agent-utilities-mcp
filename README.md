@@ -1,6 +1,6 @@
 # Agent Utilities MCP
 
-Connect a local stdio MCP client to 35 paid utility APIs for HTML extraction, JSON validation, agent configuration checks and product data. This MIT-licensed adapter runs locally; the hosted API is a paid service.
+Connect a local stdio MCP client to 36 paid utility APIs for HTML extraction, JSON validation, agent configuration checks and product data. This MIT-licensed adapter runs locally; the hosted API is a paid service.
 
 [Tool catalog](https://agent-utilities.agent-utilities.workers.dev/tools) · [Installation guide](https://agent-utilities.agent-utilities.workers.dev/integrations/mcp) · [Pricing](https://agent-utilities.agent-utilities.workers.dev/pricing) · [Policies and support](https://agent-utilities.agent-utilities.workers.dev/policies)
 
@@ -86,7 +86,7 @@ Omit the key to discover tools without spending credits. Obtain an API key and s
 ## What it does
 
 - Fetches the public tool definitions and current per-call prices on startup.
-- Exposes the 35 service tools and one recovery helper. The recovery helper is not an additional product.
+- Exposes the 36 service tools and one recovery helper. The recovery helper is not an additional product.
 - Sends authenticated calls only to the fixed Agent Utilities origin; redirects are rejected.
 - Generates a stable debit request ID and retries one failed HTTP exchange with the identical body and ID.
 - Keeps request identities and input hashes in process memory, without logging inputs, results or credentials. Remote data handling is described in the service policies.
@@ -119,3 +119,10 @@ Automated tests verify lost-response recovery against a local Cloudflare credit 
 ## License
 
 Adapter code: MIT. Bundled dependencies: see `THIRD-PARTY-NOTICES.txt`. The license covers the adapter, not free access to the hosted APIs.
+
+
+## Choose whole packs for a shopping task
+
+The [pack planner](https://agent-utilities.agent-utilities.workers.dev/tools/commerce.pack-plan) finds the minimum item subtotal for a required count of interchangeable items using explicit pack limits. Twelve items can cost $15.98 as two six-packs at $7.99, even when a ten-pack at $11.99 has a lower unit price. The operation costs $0.0008 in prepaid credits. Shipping, tax, coupons and product equivalence are outside its optimization.
+
+Call `commerce_pack_plan` through MCP, or use the [Python client](https://agent-utilities.agent-utilities.workers.dev/integrations/python) with tool ID `commerce.pack-plan` and an explicit 800-micro-dollar ceiling. Inspect the [free JSON contract](https://agent-utilities.agent-utilities.workers.dev/v1/content/tools/commerce.pack-plan) before executing. The [worked workflow](https://agent-utilities.agent-utilities.workers.dev/use-cases/choose-whole-packs) explains stock limits and how pack counts map into cart reconciliation. The adapter discovers this tool from the service; the immutable v0.2.1 bundle does not need replacement.
