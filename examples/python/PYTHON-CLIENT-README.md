@@ -80,3 +80,23 @@ These commands make no network requests. They print fixed sample inputs and expe
 To execute one selected scenario using existing credits, set `AGENT_UTILITIES_API_KEY` privately and add `--execute`. A new call is capped at $0.0008. A valid infeasible result is also billable. Funding starts with a $5 credit pack, but no payment or account is needed to inspect these examples.
 
 The script prints the request ID and exact input before execution. Retain them privately if execution needs recovery; rerunning the script creates a new billable identity. Use the original ID and input with `prepare_call` and `Client.execute` as described above. The example does not buy credits or place orders, verify stock, or account for shipping, tax or product equivalence. See the [whole-pack workflow](https://agent-utilities.agent-utilities.workers.dev/use-cases/choose-whole-packs) before adapting it.
+
+## Compare delivered checkout totals
+
+Download [compare_carts.py](https://agent-utilities.agent-utilities.workers.dev/downloads/compare_carts.py) and [cart_comparison_example.json](https://agent-utilities.agent-utilities.workers.dev/downloads/cart_comparison_example.json), plus their [script checksum](https://agent-utilities.agent-utilities.workers.dev/downloads/compare_carts.py.sha256) and [input checksum](https://agent-utilities.agent-utilities.workers.dev/downloads/cart_comparison_example.json.sha256). Keep them beside `agent_utilities.py`. These files also live in the public repository's `examples/python` folder.
+
+```sh
+shasum -a 256 -c compare_carts.py.sha256
+shasum -a 256 -c cart_comparison_example.json.sha256
+python3 compare_carts.py
+```
+
+The default command is offline. It validates the supplied inputs and prints the planned requests and price ceilings; it does not calculate the checkout totals, use a key or contact the service. The fictional example compares identical items: an $18 item plus $5.99 shipping and $1.50 tax totals $25.49; a $22 item with a $1 discount, free shipping and $1.50 tax totals $22.50. The second cart has the lower delivered total despite its higher item price.
+
+Use `--input your-carts.json` for 2–10 comparable checkout snapshots. Follow the sample structure, use unique cart IDs, declare one currency and decimal scale, and supply explicit line and order discounts. Each line discount applies once to the entire line. Set unknown shipping, tax or fees to `null`, never zero. Establish equivalent products, quantities and eligible discounts before comparison. The recipe does not verify those facts, fetch merchant data or calculate taxes from local law.
+
+Add `--execute` only when you want paid execution using existing credits. It sends one `commerce.price-components` call per cart, each capped at $0.0005. The default total ceiling is $0.001 for two carts; for three carts, explicitly supply `--max-total-micro-usd 1500`. The maximum is 5000 micro-dollars ($0.005) for ten carts. A candidate count exceeding the chosen ceiling is rejected before any requests. An unknown-cost result is still a successful, billable reconciliation.
+
+The output retains every known subtotal and missing component. `completeRanking` orders only fully supplied checkout totals using exact integers. `cheapestCompleteIds` includes ties among complete carts; `overallCheapestIds` is `null` whenever any candidate is incomplete. It will not silently recommend a merchant by treating missing tax or shipping as free. A declared-total mismatch is reported alongside the computed total for review.
+
+The script prints every prepared ID and exact input before execution, then emits each successful response and receipt. Preserve this plan privately: it may contain your shopping data. If any call fails or returns an unexpected result, later calls stop; earlier completed calls remain charged. This is not an atomic transaction. **Do not rerun `--execute` to recover an uncertain result.** Use the original tool, input and request ID from the printed plan with `prepare_call` and `Client.execute` within ten minutes, as described above. The recipe creates no durable journal, buys no credits and places no merchant orders.

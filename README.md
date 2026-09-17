@@ -134,3 +134,7 @@ Try the [Python pack-planning example](examples/python/pack_plan_example.py) wit
 ## Upgrading from 0.2.1
 
 Install 0.3.0 for per-call price ceilings and recovery-only manual retries. Version 0.2.1 does not enforce these adapter protections. Existing 0.2.1 release bytes remain available and unchanged; upgrading requires replacing the installed adapter. The per-call ceiling does not limit the number of new calls or provide a total session budget.
+
+### Compare delivered checkout totals
+
+The standard-library Python recipe in `examples/python/compare_carts.py` compares supplied merchant checkout snapshots using one capped reconciliation per cart. Default preview is offline; execution requires `--execute` and existing credits. It ranks complete totals, retains ties and declines to name an overall winner when any cart has unknown shipping, tax or fees. The two-cart default ceiling is $0.001. See the [comparison guide](https://agent-utilities.agent-utilities.workers.dev/integrations/python#compare-carts) for sample inputs, checksums, explicit budgets and recovery.

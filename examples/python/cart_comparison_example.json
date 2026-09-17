@@ -1,0 +1,22 @@
+{
+  "currency": "USD",
+  "minorUnitDigits": 2,
+  "carts": [
+    {
+      "id": "lower-item-price",
+      "items": [{ "id": "identical-item", "unitPrice": "18.00", "quantity": 1, "discount": "0.00" }],
+      "orderDiscount": "0.00",
+      "shipping": "5.99",
+      "tax": "1.50",
+      "fees": "0.00"
+    },
+    {
+      "id": "free-shipping",
+      "items": [{ "id": "identical-item", "unitPrice": "22.00", "quantity": 1, "discount": "0.00" }],
+      "orderDiscount": "1.00",
+      "shipping": "0.00",
+      "tax": "1.50",
+      "fees": "0.00"
+    }
+  ]
+}
