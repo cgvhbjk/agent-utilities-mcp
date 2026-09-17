@@ -1,0 +1,83 @@
+{
+  "source": "Build-time local fixture; no hosted service calls or paid receipts.",
+  "normalized": {
+    "locale": "de-DE",
+    "currency": "EUR",
+    "minorUnitDigits": 2,
+    "amounts": [
+      {
+        "id": "coffee-1kg",
+        "valid": true,
+        "amount": "16.49",
+        "minorUnits": "1649",
+        "currencyToken": "€",
+        "issue": null
+      },
+      {
+        "id": "mug",
+        "valid": true,
+        "amount": "9.95",
+        "minorUnits": "995",
+        "currencyToken": "EUR",
+        "issue": null
+      }
+    ],
+    "allValid": true,
+    "acceptedCurrencyTokens": [
+      "EUR",
+      "€"
+    ],
+    "scope": "Nonnegative prices with ASCII digits and explicit locale, currency and decimal scale. One optional currency affix; no currency inference, conversion, rounding, signs, ranges or prose. A shared symbol such as $ is interpreted using the declared currency, not independently verified."
+  },
+  "updatedCart": {
+    "currency": "EUR",
+    "minorUnitDigits": 2,
+    "items": [
+      {
+        "id": "coffee-1kg",
+        "unitPrice": "16.49",
+        "quantity": 2,
+        "discount": "0.00"
+      },
+      {
+        "id": "mug",
+        "unitPrice": "9.95",
+        "quantity": 1,
+        "discount": "0.00"
+      }
+    ],
+    "orderDiscount": "2.00",
+    "shipping": "4.99",
+    "tax": null,
+    "fees": "0.00"
+  },
+  "reconciliation": {
+    "currency": "EUR",
+    "minorUnitDigits": 2,
+    "lines": [
+      {
+        "id": "coffee-1kg",
+        "subtotal": "32.98",
+        "discount": "0.00",
+        "total": "32.98"
+      },
+      {
+        "id": "mug",
+        "subtotal": "9.95",
+        "discount": "0.00",
+        "total": "9.95"
+      }
+    ],
+    "itemSubtotal": "42.93",
+    "lineDiscounts": "0.00",
+    "orderDiscount": "2.00",
+    "knownTotal": "45.92",
+    "total": null,
+    "missingComponents": [
+      "tax"
+    ],
+    "matchesDeclaredTotal": null,
+    "difference": null,
+    "scope": "Exact arithmetic on supplied amounts only. Discounts are absolute amounts; line discount applies once to the whole line. Missing shipping, tax or fees remain unknown. No tax-law calculation, checkout verification or currency-exponent lookup."
+  }
+}

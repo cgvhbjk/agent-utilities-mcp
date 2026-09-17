@@ -16,5 +16,6 @@ jobs:
       - run: npm run build
       - run: sha256sum -c agent-utilities-mcp.mjs.sha256
       - run: node verify.mjs
+      - run: node verify-examples.mjs
       - run: docker build -t agent-utilities-mcp .
       - run: node verify.mjs --docker

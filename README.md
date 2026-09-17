@@ -4,6 +4,45 @@ Connect a local stdio MCP client to 35 paid utility APIs for HTML extraction, JS
 
 [Tool catalog](https://agent-utilities.agent-utilities.workers.dev/tools) · [Installation guide](https://agent-utilities.agent-utilities.workers.dev/integrations/mcp) · [Pricing](https://agent-utilities.agent-utilities.workers.dev/pricing) · [Policies and support](https://agent-utilities.agent-utilities.workers.dev/policies)
 
+## Try the shopping example without an account
+
+Clone this repository and preview the supplied cart with Node.js 22+:
+
+```sh
+cd examples/cart
+shasum -a 256 -c cart-workflow.mjs.sha256
+node cart-workflow.mjs --preview cart-example.json
+```
+
+Preview validates the input and prints the three-step plan **offline**, with no API key, network request or charge. It does not execute the tools. The included [expected output](https://github.com/cgvhbjk/agent-utilities-mcp/blob/main/examples/cart/cart-example-output.json) is a local fixture: German price strings become decimal amounts, guarded patches update the supplied cart snapshot, and cost reconciliation returns a known total of **€45.92**. Tax is unknown, so the final total remains `null`.
+
+To run those three operations against the hosted service, privately set `AGENT_UTILITIES_API_KEY` in your process environment and explicitly choose:
+
+```sh
+node cart-workflow.mjs --execute cart-example.json
+```
+
+Execution spends existing service credits. The recipe enforces per-call price ceilings totaling **at most $0.0013** (0.13 cents) across its three logical calls. It stops if a discovered price is too high or a later price exceeds the authorized ceiling. Completed steps stay charged if a later step fails. Each step returns its debit receipt and recovery information; do not rerun the entire recipe after an uncertain response. Read the [recipe instructions](https://github.com/cgvhbjk/agent-utilities-mcp/blob/main/examples/cart/CART-WORKFLOW-README.md) before execution. This example does not buy credits or place a merchant order.
+
+The recipe is a separate standalone download, not part of the immutable v0.2.1 MCPB bundle. You can also get it from the [workflow page](https://agent-utilities.agent-utilities.workers.dev/use-cases/normalize-prices-update-cart). The generic MCP adapter's spending behavior remains as described below.
+
+## Read the material directly from an agent
+
+No account or key is needed to read contracts, examples, prices and guides:
+
+```sh
+curl --fail --silent --show-error \
+  https://agent-utilities.agent-utilities.workers.dev/v1/content/index
+```
+
+- [Complete JSON content](https://agent-utilities.agent-utilities.workers.dev/v1/content): tool input/output schemas, example requests, execution headers, workflows and documentation.
+- [Full text guide](https://agent-utilities.agent-utilities.workers.dev/llms-full.txt): the same material as plain text.
+- [One tool's contract](https://agent-utilities.agent-utilities.workers.dev/v1/content/tools/commerce.money-parse): request schema, example, price and execution URL.
+- [Cart workflow](https://agent-utilities.agent-utilities.workers.dev/v1/content/workflows/normalize-prices-update-cart): the steps and current aggregate price.
+- [OpenAPI](https://agent-utilities.agent-utilities.workers.dev/openapi.json): HTTP tool operations, optional credit ceiling header and error responses.
+
+These public GET endpoints support cross-origin browser reads. Tool execution remains paid. Custom HTTP clients can send `X-Max-Credit-Micro-Usd` to cap a new prepaid credit debit; read the [quickstart](https://agent-utilities.agent-utilities.workers.dev/quickstart) for retry semantics. The generic stdio adapter does not set that optional header automatically.
+
 ## Install
 
 Also listed on [Smithery](https://smithery.ai/servers/benjaminhelfand/agent-utilities) as a local Node.js MCPB bundle. Its download matches the v0.2.1 GitHub artifact. Connect the adapter for the complete current tool schemas and prices; directory metadata is a discovery summary.

@@ -1,0 +1,19 @@
+{
+  "locale": "de-DE",
+  "cart": {
+    "currency": "EUR",
+    "minorUnitDigits": 2,
+    "items": [
+      { "id": "coffee-1kg", "unitPrice": "17.00", "quantity": 2, "discount": "0.00" },
+      { "id": "mug", "unitPrice": "10.00", "quantity": 1, "discount": "0.00" }
+    ],
+    "orderDiscount": "2.00",
+    "shipping": "4.99",
+    "tax": null,
+    "fees": "0.00"
+  },
+  "prices": [
+    { "id": "coffee-1kg", "text": "16,49 €" },
+    { "id": "mug", "text": "EUR 9,95" }
+  ]
+}
