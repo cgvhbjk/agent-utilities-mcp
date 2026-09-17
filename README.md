@@ -24,7 +24,7 @@ node cart-workflow.mjs --execute cart-example.json
 
 Execution spends existing service credits. The recipe enforces per-call price ceilings totaling **at most $0.0013** (0.13 cents) across its three logical calls. It stops if a discovered price is too high or a later price exceeds the authorized ceiling. Completed steps stay charged if a later step fails. Each step returns its debit receipt and recovery information; do not rerun the entire recipe after an uncertain response. Read the [recipe instructions](https://github.com/cgvhbjk/agent-utilities-mcp/blob/main/examples/cart/CART-WORKFLOW-README.md) before execution. This example does not buy credits or place a merchant order.
 
-The recipe is a separate standalone download, not part of the immutable v0.2.1 MCPB bundle. You can also get it from the [workflow page](https://agent-utilities.agent-utilities.workers.dev/use-cases/normalize-prices-update-cart). The generic MCP adapter's spending behavior remains as described below.
+The recipe is a separate standalone download, not part of the immutable v0.3.0 MCPB bundle. You can also get it from the [workflow page](https://agent-utilities.agent-utilities.workers.dev/use-cases/normalize-prices-update-cart). The generic MCP adapter's spending behavior remains as described below.
 
 ## Read the material directly from an agent
 
@@ -41,7 +41,7 @@ curl --fail --silent --show-error \
 - [Cart workflow](https://agent-utilities.agent-utilities.workers.dev/v1/content/workflows/normalize-prices-update-cart): the steps and current aggregate price.
 - [OpenAPI](https://agent-utilities.agent-utilities.workers.dev/openapi.json): HTTP tool operations, optional credit ceiling header and error responses.
 
-These public GET endpoints support cross-origin browser reads. Tool execution remains paid. Custom HTTP clients can send `X-Max-Credit-Micro-Usd` to cap a new prepaid credit debit; read the [quickstart](https://agent-utilities.agent-utilities.workers.dev/quickstart) for retry semantics. The generic stdio adapter does not set that optional header automatically.
+These public GET endpoints support cross-origin browser reads. Tool execution remains paid. Custom HTTP clients can send `X-Max-Credit-Micro-Usd` to cap a new prepaid credit debit; read the [quickstart](https://agent-utilities.agent-utilities.workers.dev/quickstart) for retry semantics. Adapter 0.3.0 caps each new call at its startup catalog price and requires server-advertised support.
 
 ## Prefer Python?
 
@@ -49,9 +49,9 @@ The [Python HTTP client](https://agent-utilities.agent-utilities.workers.dev/int
 
 ## Install
 
-Also listed on [Smithery](https://smithery.ai/servers/benjaminhelfand/agent-utilities) as a local Node.js MCPB bundle. Its download matches the v0.2.1 GitHub artifact. Connect the adapter for the complete current tool schemas and prices; directory metadata is a discovery summary.
+Also listed on [Smithery](https://smithery.ai/servers/benjaminhelfand/agent-utilities) as a local Node.js MCPB bundle. Its download matches the v0.3.0 GitHub artifact. Connect the adapter for the complete current tool schemas and prices; directory metadata is a discovery summary.
 
-For clients that support MCP bundles, download `agent-utilities-mcp-0.2.1.mcpb` and its checksum from the [v0.2.1 release](https://github.com/cgvhbjk/agent-utilities-mcp/releases/tag/v0.2.1). Verify the checksum before importing the bundle through your client's extension settings. It contains the adapter, manifest and license notices. The bundle is unsigned; the release checksum establishes file consistency, not an independent signature. Bundle schema and standalone execution are tested; installation in each desktop client is not verified.
+For clients that support MCP bundles, download `agent-utilities-mcp-0.3.0.mcpb` and its checksum from the [v0.3.0 release](https://github.com/cgvhbjk/agent-utilities-mcp/releases/tag/v0.3.0). Verify the checksum before importing the bundle through your client's extension settings. It contains the adapter, manifest and license notices. The bundle is unsigned; the release checksum establishes file consistency, not an independent signature. Bundle schema and standalone execution are tested; installation in each desktop client is not verified.
 
 The bundle's optional **Agent Utilities API key** setting is marked sensitive. Leave it empty for free discovery, or enter only your API key to enable paid calls. Node.js 22+ is required; use a compatible runtime provided by your client or installed locally. If your client cannot import MCPB files, use the manual setup below.
 
@@ -92,7 +92,7 @@ Omit the key to discover tools without spending credits. Obtain an API key and s
 - Keeps request identities and input hashes in process memory, without logging inputs, results or credentials. Remote data handling is described in the service policies.
 - Does not purchase credits, automatically top up, access a wallet or accept recovery credentials.
 
-Try a useful task such as: “Use commerce_gtin_validate to check barcode 036000291452.” One successful call costs $0.0003. Current tool prices range from $0.0003 to $0.002; these are experimental prices, not fixed forever. Every new operation spends credits. There is no adapter spending cap beyond the account's prepaid balance. Review prices and approve spending in your client.
+Try a useful task such as: “Use commerce_gtin_validate to check barcode 036000291452.” One successful call costs $0.0003. Current tool prices range from $0.0003 to $0.002; these are experimental prices, not fixed forever. Every new operation spends credits. Version 0.3.0 caps each new debit at the price discovered at startup. There is no total session budget; repeated new calls can spend the available balance. A higher server price returns HTTP 412 instead of increasing the ceiling. Restart only after reviewing refreshed prices. Review prices and approve spending in your client.
 
 ## Retry an uncertain result
 
@@ -106,7 +106,7 @@ Results and uncertain outcomes include a `requestId`. Call `agent_utilities_retr
 }
 ```
 
-Within ten minutes a completed request returns the saved result without another debit. A request that never reached the service can execute and debit once. Do not generate a new ID or change the input to recover an uncertain result. Expired request identities cannot make another debit. Reusing an MCP request ID within one process also retains its original debit identity.
+Within ten minutes a completed request returns the saved result without another debit. In version 0.3.0 the recovery helper sends a zero ceiling: a request that never reached the service is rejected without a new reservation. This does not cancel a previous reservation or refund a charge. The automatic transport retry of a new call retains its original nonzero ceiling and can still execute that authorized operation once. Do not generate a new ID or change the input to recover an uncertain result. Expired request identities cannot make another debit. Reusing an MCP request ID within one process also retains its original debit identity.
 
 After a process restart you need the returned request ID and original input for recovery. If the process died before your client received the ID, inspect the balance or contact support before repeating the operation. No durable local input or result history is stored. Each process retains up to 5,000 MCP request identities, then refuses new calls until restarted; finish pending recovery first.
 
@@ -125,6 +125,10 @@ Adapter code: MIT. Bundled dependencies: see `THIRD-PARTY-NOTICES.txt`. The lice
 
 The [pack planner](https://agent-utilities.agent-utilities.workers.dev/tools/commerce.pack-plan) finds the minimum item subtotal for a required count of interchangeable items using explicit pack limits. Twelve items can cost $15.98 as two six-packs at $7.99, even when a ten-pack at $11.99 has a lower unit price. The operation costs $0.0008 in prepaid credits. Shipping, tax, coupons and product equivalence are outside its optimization.
 
-Call `commerce_pack_plan` through MCP, or use the [Python client](https://agent-utilities.agent-utilities.workers.dev/integrations/python) with tool ID `commerce.pack-plan` and an explicit 800-micro-dollar ceiling. Inspect the [free JSON contract](https://agent-utilities.agent-utilities.workers.dev/v1/content/tools/commerce.pack-plan) before executing. The [worked workflow](https://agent-utilities.agent-utilities.workers.dev/use-cases/choose-whole-packs) explains stock limits and how pack counts map into cart reconciliation. The adapter discovers this tool from the service; the immutable v0.2.1 bundle does not need replacement.
+Call `commerce_pack_plan` through MCP, or use the [Python client](https://agent-utilities.agent-utilities.workers.dev/integrations/python) with tool ID `commerce.pack-plan` and an explicit 800-micro-dollar ceiling. Inspect the [free JSON contract](https://agent-utilities.agent-utilities.workers.dev/v1/content/tools/commerce.pack-plan) before executing. The [worked workflow](https://agent-utilities.agent-utilities.workers.dev/use-cases/choose-whole-packs) explains stock limits and how pack counts map into cart reconciliation. The adapter discovers this tool from the service; new tools do not require replacing the adapter.
 
 Try the [Python pack-planning example](examples/python/pack_plan_example.py) with its [three sample cases](examples/python/pack_plan_cases.json). Run `python3 pack_plan_example.py` from `examples/python`, or select `--scenario limited-stock` / `--scenario insufficient-stock`. The default is an offline display of fixed fixtures; it sends no request and computes no new answer. Adding `--execute` explicitly authorizes one hosted call capped at $0.0008 using existing credits. A valid infeasible result is billable too. See the [Python guide](https://agent-utilities.agent-utilities.workers.dev/integrations/python) for checksums, input limits and recovery before executing. Each new run creates a new ID; do not rerun to recover an uncertain paid result.
+
+## Upgrading from 0.2.1
+
+Install 0.3.0 for per-call price ceilings and recovery-only manual retries. Version 0.2.1 does not enforce these adapter protections. Existing 0.2.1 release bytes remain available and unchanged; upgrading requires replacing the installed adapter. The per-call ceiling does not limit the number of new calls or provide a total session budget.

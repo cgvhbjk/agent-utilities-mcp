@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "agent-utilities-mcp",
   "display_name": "Agent Utilities",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Paid utility APIs for HTML, JSON, shopping data and agent configuration, with credit-safe retries.",
   "long_description": "Connect to Agent Utilities through a local MCP adapter. Discover tools without a key; execution requires prepaid service credits. Calls start at $0.0003 and credit packs cost $5 USD. The adapter handles stable debit request IDs and recovery without automatic top-ups or card purchases. Inputs are sent to the Agent Utilities service under its data policy. Review per-call prices and approve spending in your client. Keep your account recovery credential separate from the API key.",
   "author": {

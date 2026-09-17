@@ -3,7 +3,7 @@
   "name": "io.github.cgvhbjk/agent-utilities-mcp",
   "title": "Agent Utilities",
   "description": "Paid tools for HTML, JSON, shopping data and agent configs. Free discovery; $5 prepaid credits.",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "repository": {
     "url": "https://github.com/cgvhbjk/agent-utilities-mcp",
     "source": "github"
@@ -12,8 +12,8 @@
   "packages": [
     {
       "registryType": "mcpb",
-      "identifier": "https://github.com/cgvhbjk/agent-utilities-mcp/releases/download/v0.2.1/agent-utilities-mcp-0.2.1.mcpb",
-      "fileSha256": "070972957d376ad3f18b80e8edcb60f3bd84b9f27f996a50657f128db90d3b42",
+      "identifier": "https://github.com/cgvhbjk/agent-utilities-mcp/releases/download/v0.3.0/agent-utilities-mcp-0.3.0.mcpb",
+      "fileSha256": "9063c239c1c8278432c65c13b961935044603111c4cf6ce14a7cc70c131c9415",
       "transport": {
         "type": "stdio"
       }

@@ -1,7 +1,7 @@
 {
   "name": "agent-utilities",
   "displayName": "Agent Utilities",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Prepaid HTML, JSON and shopping-data APIs through local MCP. Free discovery; calls from $0.0003, funded with $5 credit packs.",
   "author": { "name": "Agent Utilities" },
   "homepage": "https://agent-utilities.agent-utilities.workers.dev/integrations/mcp",

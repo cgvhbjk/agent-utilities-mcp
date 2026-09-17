@@ -14327,23 +14327,32 @@ async function createAdapter(apiKey, transportFetch = fetch) {
   if (!discovery.ok) throw new Error("Catalog unavailable. Try again later.");
   const catalog = ListToolsResultSchema.parse((await boundedJson(discovery)).result);
   if (catalog.nextCursor || catalog.tools.length > 500 || catalog.tools.some((t) => t.name === RETRY_TOOL)) throw new Error("Unsupported catalog. Update the adapter.");
-  const names = new Set(catalog.tools.map((t) => t.name));
-  const server = new Server({ name: "agent-utilities", version: "0.2.1" }, { capabilities: { tools: {} }, instructions: "Paid tools spend prepaid Agent Utilities credits. Review prices and get user approval for spending. Each new tool call is a new billable operation. On uncertain outcomes use agent_utilities_retry with the returned requestId and unchanged name and arguments within ten minutes; never repeat as a new operation. No card purchases or automatic top-ups are available through this adapter." });
+  if (catalog._meta?.["agent-utilities/creditPriceLimits"] !== true) throw new Error("Server price-limit support is required.");
+  const prices = /* @__PURE__ */ new Map();
+  for (const tool of catalog.tools) {
+    const price = tool._meta?.["agent-utilities/priceMicroUsd"];
+    if (typeof price !== "number" || !Number.isSafeInteger(price) || price < 0 || price > 999999999999 || prices.has(tool.name)) {
+      throw new Error("Catalog must contain unique tool names and valid integer credit prices.");
+    }
+    prices.set(tool.name, price);
+  }
+  const names = new Set(prices.keys());
+  const server = new Server({ name: "agent-utilities", version: "0.3.0" }, { capabilities: { tools: {} }, instructions: "Paid tools spend prepaid Agent Utilities credits. Review prices and get user approval for spending. Each new tool call is a new billable operation. On uncertain outcomes use agent_utilities_retry with the returned requestId and unchanged name and arguments within ten minutes; never repeat as a new operation. New calls are capped at the price discovered when this adapter started. The retry helper authorizes no new debit; an unreceived request is rejected. There is no total session budget. No card purchases or automatic top-ups are available through this adapter." });
   const requests = /* @__PURE__ */ new Map();
   server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: [
     ...catalog.tools.map((t) => ({
       ...t,
-      description: t.description + " Each new call spends credits. Use agent_utilities_retry after an uncertain outcome.",
+      description: t.description + " Each new call spends credits, capped at the startup catalog price. Use agent_utilities_retry after an uncertain outcome.",
       annotations: { ...t.annotations, readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true }
     })),
     {
       name: RETRY_TOOL,
-      description: "Recover a previous Agent Utilities call with its exact requestId, tool name and arguments. Within ten minutes, a completed request returns its result without another debit. An unreceived request can execute and debit once. Do not invent a new ID or change the input.",
+      description: "Recover a previous Agent Utilities call with its exact requestId, tool name and arguments. Within ten minutes, a completed request returns its result without another debit. A zero ceiling prevents new reservations; a request that never arrived is rejected without a new debit. This does not cancel any previous reservation. Do not invent a new ID or change the input.",
       inputSchema: { type: "object", properties: { requestId: { type: "string", pattern: REQUEST_PATTERN.source }, name: { type: "string" }, arguments: { type: "object" } }, required: ["requestId", "name", "arguments"], additionalProperties: false },
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     }
   ] }));
-  async function invoke(name, args, id) {
+  async function invoke(name, args, id, ceiling) {
     const body = JSON.stringify({ jsonrpc: "2.0", id, method: "tools/call", params: { name, arguments: args } });
     if (Buffer.byteLength(body) > LIMIT) return failure("Input exceeds the 128 KiB request limit. No request was sent.");
     let status;
@@ -14351,7 +14360,7 @@ async function createAdapter(apiKey, transportFetch = fetch) {
       try {
         const response = await transportFetch(SERVICE_ORIGIN + "/mcp", {
           method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: "Bearer " + apiKey, "Idempotency-Key": id },
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + apiKey, "Idempotency-Key": id, "X-Max-Credit-Micro-Usd": String(ceiling) },
           body,
           redirect: "error",
           signal: AbortSignal.timeout(15e3)
@@ -14382,7 +14391,7 @@ async function createAdapter(apiKey, transportFetch = fetch) {
     if (request.params.name === RETRY_TOOL) {
       const { requestId, name, arguments: original } = args;
       if (Object.keys(args).length !== 3 || typeof requestId !== "string" || !REQUEST_PATTERN.test(requestId) || typeof name !== "string" || !names.has(name) || !original || typeof original !== "object" || Array.isArray(original)) return failure("Recovery requires a valid requestId, original tool name, and original arguments object.");
-      return invoke(name, original, requestId);
+      return invoke(name, original, requestId, 0);
     }
     if (!names.has(request.params.name)) return failure("Unknown tool. Refresh the catalog.");
     const encoded = JSON.stringify([request.params.name, args]);
@@ -14396,7 +14405,7 @@ async function createAdapter(apiKey, transportFetch = fetch) {
       previous = { hash, id: Date.now() + "_" + randomUUID() };
       requests.set(identity, previous);
     }
-    return invoke(request.params.name, args, previous.id);
+    return invoke(request.params.name, args, previous.id, prices.get(request.params.name));
   });
   return server;
 }
