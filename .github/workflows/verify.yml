@@ -19,6 +19,8 @@ jobs:
       - run: node verify-cursor.mjs
       - run: node verify-vscode.mjs
       - run: node verify-examples.mjs
+      - run: cd examples/crypto && sha256sum -c agent-utilities-crypto.mjs.sha256 && sha256sum -c crypto-example.mjs.sha256
+      - run: node verify-crypto.mjs
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'

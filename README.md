@@ -6,6 +6,10 @@ Connect a local stdio MCP client to 36 paid utility APIs for HTML extraction, JS
 
 VS Code users: [open the setup link and private-key configuration](https://agent-utilities.agent-utilities.workers.dev/integrations/mcp#vscode). [Detailed instructions](https://github.com/cgvhbjk/agent-utilities-mcp/blob/main/VSCODE.md) are included in this source repository.
 
+## Pay per call with USDC
+
+For agents with a Circle Gateway balance, a separate [standalone USDC client](https://agent-utilities.agent-utilities.workers.dev/integrations/crypto) supports Base mainnet payments without a $5 Stripe pack. [Download and preview the example](https://github.com/cgvhbjk/agent-utilities-mcp/tree/main/examples/crypto). It pins network and contracts, caps each call, and saves signed requests privately for recovery. Preview is offline; preparation and submission require separate explicit commands. Real execution spends real USDC. This client is separate from the Stripe-funded MCP adapter and is not included in the immutable MCPB 0.3.0 release.
+
 ## Try the shopping example without an account
 
 Clone this repository and preview the supplied cart with Node.js 22+:
