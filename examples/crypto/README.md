@@ -3,11 +3,11 @@
 Use real USDC on Base mainnet to pay for individual Agent Utilities calls without a $5 Stripe pack. The Node.js 22+ ES module includes Circle's signing SDK and our required request-binding signature; no npm install is needed. Importing it makes no network request or payment.
 
 Downloads:
-- [Client module](https://agent-utilities.agent-utilities.workers.dev/downloads/agent-utilities-crypto.mjs)
-- [SHA-256 checksum](https://agent-utilities.agent-utilities.workers.dev/downloads/agent-utilities-crypto.mjs.sha256)
-- [Runnable GTIN example](https://agent-utilities.agent-utilities.workers.dev/downloads/crypto-example.mjs)
-- [Example checksum](https://agent-utilities.agent-utilities.workers.dev/downloads/crypto-example.mjs.sha256)
-- [License notices](https://agent-utilities.agent-utilities.workers.dev/downloads/CRYPTO-CLIENT-NOTICES.txt)
+- [Client module](https://agent-utilities.agent-utilities.workers.dev/downloads/agent-utilities-crypto.mjs?utm_source=github)
+- [SHA-256 checksum](https://agent-utilities.agent-utilities.workers.dev/downloads/agent-utilities-crypto.mjs.sha256?utm_source=github)
+- [Runnable GTIN example](https://agent-utilities.agent-utilities.workers.dev/downloads/crypto-example.mjs?utm_source=github)
+- [Example checksum](https://agent-utilities.agent-utilities.workers.dev/downloads/crypto-example.mjs.sha256?utm_source=github)
+- [License notices](https://agent-utilities.agent-utilities.workers.dev/downloads/CRYPTO-CLIENT-NOTICES.txt?utm_source=github)
 
 ## Preview without funds
 
@@ -23,7 +23,7 @@ Preview is offline. It displays the fixed GTIN input, Base mainnet network and 3
 
 ## Prepare and send a real call
 
-Use a separately approved paying wallet with a funded Circle Gateway balance. It must differ from the merchant receiving wallet. Testnet tokens cannot pay mainnet calls. Deposits and withdrawals can incur fees; initial Base deposits can take time. The browser [wallet workspace](https://agent-utilities.agent-utilities.workers.dev/wallet#wallet) offers funding controls. The client does not deposit, bridge or withdraw money.
+Use a separately approved paying wallet with a funded Circle Gateway balance. It must differ from the merchant receiving wallet. Testnet tokens cannot pay mainnet calls. Deposits and withdrawals can incur fees; initial Base deposits can take time. The browser [wallet workspace](https://agent-utilities.agent-utilities.workers.dev/wallet?utm_source=github#wallet) offers funding controls. The client does not deposit, bridge or withdraw money.
 
 Read [/wallet-config](https://agent-utilities.agent-utilities.workers.dev/wallet-config) and independently approve its receiving address. Set these variables through your private secret manager or local environment, never in source, a URL or a shared transcript:
 
@@ -53,4 +53,4 @@ import { prepareCall, sendPrepared, privateKeyToAccount } from './agent-utilitie
 
 The returned object contains `url`, `body`, `headers` and `quoteExpiresAt`. Persist it privately before the first `sendPrepared(prepared)` if your process may restart. That function sends the object unchanged, does not sign again, does not follow redirects and returns a Fetch Response. Set an independent ceiling for each new logical operation and enforce an overall budget in your agent. A per-call ceiling is not a session spending limit.
 
-Read the chosen tool's schema from [/v1/tools](https://agent-utilities.agent-utilities.workers.dev/v1/tools). An ordinary x402 client does not automatically support our extra input-binding signature. The downloadable module does. Existing MCP and Python adapters continue to use Stripe credits; importing this module does not change their payment method.
+Read the chosen tool's schema from [/v1/tools](https://agent-utilities.agent-utilities.workers.dev/v1/tools?utm_source=github). An ordinary x402 client does not automatically support our extra input-binding signature. The downloadable module does. Existing MCP and Python adapters continue to use Stripe credits; importing this module does not change their payment method.

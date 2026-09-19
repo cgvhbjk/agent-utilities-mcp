@@ -1,6 +1,6 @@
 # Runnable cart cleanup recipe
 
-Download the Node.js 22+ recipe, its checksum and sample JSON from [the workflow page](https://agent-utilities.agent-utilities.workers.dev/use-cases/normalize-prices-update-cart). No npm install is required. The script includes the existing Agent Utilities MCP adapter and SDK.
+Download the Node.js 22+ recipe, its checksum and sample JSON from [the workflow page](https://agent-utilities.agent-utilities.workers.dev/use-cases/normalize-prices-update-cart?utm_source=github). No npm install is required. The script includes the existing Agent Utilities MCP adapter and SDK.
 
 From the download folder:
 
@@ -15,7 +15,7 @@ The sample replaces €17.00 coffee with €16.49 and a €10.00 mug with €9.9
 
 ## Execute with prepaid credits
 
-Obtain an API key and existing prepaid balance in the [workspace](https://agent-utilities.agent-utilities.workers.dev/billing). Set `AGENT_UTILITIES_API_KEY` privately using your environment or secret manager. Never enter a recovery credential, put a key in a command argument or commit one to a file.
+Obtain an API key and existing prepaid balance in the [workspace](https://agent-utilities.agent-utilities.workers.dev/billing?utm_source=github). Set `AGENT_UTILITIES_API_KEY` privately using your environment or secret manager. Never enter a recovery credential, put a key in a command argument or commit one to a file.
 
 ```sh
 node cart-workflow.mjs --execute cart-example.json
@@ -31,7 +31,7 @@ Completed calls remain charged if a later step fails. If a displayed price is in
 
 The existing MCP adapter automatically retries one uncertain HTTP exchange using the same debit identity. It does not retry the whole recipe. If a step still fails or is uncertain, execution stops and prints that step's result and original arguments.
 
-Use `agent_utilities_retry` in your configured MCP client with the returned `requestId`, original MCP tool name and exact original arguments within ten minutes. Follow the [adapter recovery instructions](https://agent-utilities.agent-utilities.workers.dev/integrations/mcp). Do not rerun `--execute` to recover: a new run generates new operations and can charge again for completed steps. The recipe does not automatically resume later steps; use the recovered output and documented mapping to continue in your MCP client.
+Use `agent_utilities_retry` in your configured MCP client with the returned `requestId`, original MCP tool name and exact original arguments within ten minutes. Follow the [adapter recovery instructions](https://agent-utilities.agent-utilities.workers.dev/integrations/mcp?utm_source=github). Do not rerun `--execute` to recover: a new run generates new operations and can charge again for completed steps. The recipe does not automatically resume later steps; use the recovered output and documented mapping to continue in your MCP client.
 
 There is no durable local journal. If the process exits before returning an ID, inspect your balance or contact support before repeating that operation. The script does not modify your input file or a merchant cart.
 
