@@ -1,6 +1,9 @@
 # Agent Utilities MCP
 
-Connect a local stdio MCP client to 36 paid utility APIs for HTML extraction, JSON validation, agent configuration checks and product data. This MIT-licensed adapter runs locally; the hosted API is a paid service.
+A hosted Streamable HTTP connection is also available at `https://agent-utilities.agent-utilities.workers.dev/mcp/remote`. It provides free resources and call preparation, plus paid execution with existing credits and a private Authorization header. No local Node process is required for that connection. Read the [hosted MCP guide](https://agent-utilities.agent-utilities.workers.dev/v1/content/docs/remote-mcp); its wrapped tool arguments differ from this local adapter. No OAuth or wallet signing is provided.
+
+
+Connect a local stdio MCP client to the current catalog of paid utility APIs for HTML extraction, JSON validation, agent configuration checks and product data. This MIT-licensed adapter runs locally; the hosted API is a paid service.
 
 [Tool catalog](https://agent-utilities.agent-utilities.workers.dev/tools?utm_source=github) · [Installation guide](https://agent-utilities.agent-utilities.workers.dev/integrations/mcp?utm_source=github) · [Pricing](https://agent-utilities.agent-utilities.workers.dev/pricing?utm_source=github) · [Policies and support](https://agent-utilities.agent-utilities.workers.dev/policies?utm_source=github)
 
@@ -8,7 +11,7 @@ VS Code users: [open the setup link and private-key configuration](https://agent
 
 ## Pay per call with USDC
 
-For agents with a Circle Gateway balance, a separate [standalone USDC client](https://agent-utilities.agent-utilities.workers.dev/integrations/crypto?utm_source=github) supports Base mainnet payments without a $5 Stripe pack. [Download and preview the example](https://github.com/cgvhbjk/agent-utilities-mcp/tree/main/examples/crypto). It pins network and contracts, caps each call, and saves signed requests privately for recovery. Preview is offline; preparation and submission require separate explicit commands. Real execution spends real USDC. This client is separate from the Stripe-funded MCP adapter and is not included in the immutable MCPB 0.3.0 release.
+For agents with a Circle Gateway balance, a separate [standalone USDC client](https://agent-utilities.agent-utilities.workers.dev/integrations/crypto?utm_source=github) supports Base mainnet payments without a Stripe credit pack. [Download and preview the example](https://github.com/cgvhbjk/agent-utilities-mcp/tree/main/examples/crypto). It pins network and contracts, caps each call, and saves signed requests privately for recovery. Preview is offline; preparation and submission require separate explicit commands. Real execution spends real USDC. This client is separate from the Stripe-funded MCP adapter and is not included in the immutable MCPB 0.3.0 release.
 
 ## Try the shopping example without an account
 
@@ -85,20 +88,20 @@ For a client that uses the common `mcpServers` configuration format:
 }
 ```
 
-Replace the file path. Configure the API key privately using the client's secret settings where supported; never commit a real key or paste it into an agent prompt. Use the absolute path to Node if the client cannot find it. Remote-only MCP clients cannot launch this stdio adapter.
+Replace the file path. Configure the API key privately using the client's secret settings where supported; never commit a real key or paste it into an agent prompt. Use the absolute path to Node if the client cannot find it. For remote-only MCP clients, use the hosted Streamable HTTP endpoint above. Its paid calls require a private Authorization header and the wrapped arguments in the hosted MCP guide.
 
-Omit the key to discover tools without spending credits. Obtain an API key and separately saved recovery key in the [workspace](https://agent-utilities.agent-utilities.workers.dev/billing?utm_source=github). Only give the API key to the adapter. Live mode sells $5 USD prepaid service credits. Check the displayed mode before buying.
+Omit the key to discover tools without spending credits. Obtain an API key and separately saved recovery key in the [workspace](https://agent-utilities.agent-utilities.workers.dev/billing?utm_source=github). Only give the API key to the adapter. Live mode sells $1 or $5 USD prepaid service-credit packs. Check the displayed mode before buying.
 
 ## What it does
 
 - Fetches the public tool definitions and current per-call prices on startup.
-- Exposes the 36 service tools and one recovery helper. The recovery helper is not an additional product.
+- Exposes the service tools discovered from the current catalog and one recovery helper. The recovery helper is not an additional product.
 - Sends authenticated calls only to the fixed Agent Utilities origin; redirects are rejected.
 - Generates a stable debit request ID and retries one failed HTTP exchange with the identical body and ID.
 - Keeps request identities and input hashes in process memory, without logging inputs, results or credentials. Remote data handling is described in the service policies.
 - Does not purchase credits, automatically top up, access a wallet or accept recovery credentials.
 
-Try a useful task such as: “Use commerce_gtin_validate to check barcode 036000291452.” One successful call costs $0.0003. Current tool prices range from $0.0003 to $0.002; these are experimental prices, not fixed forever. Every new operation spends credits. Version 0.3.0 caps each new debit at the price discovered at startup. There is no total session budget; repeated new calls can spend the available balance. A higher server price returns HTTP 412 instead of increasing the ceiling. Restart only after reviewing refreshed prices. Review prices and approve spending in your client.
+Try a useful task such as: “Use commerce_gtin_validate to check barcode 036000291452.” One successful call costs $0.0003. Current tool prices range from $0.0003 to $0.003; these are experimental prices, not fixed forever. Every new operation spends credits. Version 0.3.0 caps each new debit at the price discovered at startup. There is no total session budget; repeated new calls can spend the available balance. A higher server price returns HTTP 412 instead of increasing the ceiling. Restart only after reviewing refreshed prices. Review prices and approve spending in your client.
 
 ## Retry an uncertain result
 
@@ -118,7 +121,7 @@ After a process restart you need the returned request ID and original input for 
 
 ## Service limits
 
-The release allows 1,000 new paid calls per day across the service. Inputs are bounded to 128 KiB including protocol overhead. Network tools are restricted to the hosts shown in the catalog; they are not a general web browser. Security checks are heuristics. Successful results are encrypted for ten-minute retry recovery, with request tombstones retained for one day. See the policies for retention and refund details.
+The individual-tool service allows up to 1,000 new paid call attempts per day per payment rail across the service. HTTP and hosted MCP share the credit rail's capacity; retries of an existing matching request do not create a new debit. Inputs are bounded to 128 KiB including protocol overhead. Network tools are restricted to the hosts shown in the catalog; they are not a general web browser. Security checks are heuristics. Successful results are encrypted for ten-minute retry recovery, with request tombstones retained for one day. See the policies for retention and refund details.
 
 Automated tests verify lost-response recovery against a local Cloudflare credit ledger. They do not establish customer demand or prove a live customer purchase. Directory validation and free tool discovery are not sales.
 
