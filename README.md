@@ -9,6 +9,39 @@ Connect a local stdio MCP client to the current catalog of paid utility APIs for
 
 VS Code users: [open the setup link and private-key configuration](https://agent-utilities.agent-utilities.workers.dev/integrations/mcp?utm_source=github#vscode). [Detailed instructions](https://github.com/cgvhbjk/agent-utilities-mcp/blob/main/VSCODE.md) are included in this source repository.
 
+## Turn supplied HTML into compact research inputs
+
+[Page Pack](https://agent-utilities.agent-utilities.workers.dev/products/page-pack?utm_source=github) extracts bounded readable content from HTML you already have, with its source URL, truncation flags and size estimates. Use it to prepare captured documentation or page content for an agent, then inspect the output and retain the original source.
+
+- **Free preview:** no account, card or API key; entire JSON request up to 32,768 UTF-8 bytes and output up to 3,000 characters.
+- **Paid `web.page-pack`:** HTML up to 100,000 characters within a 131,072-byte request, with output up to 12,000 characters. The current experimental price is **$0.0005 per call**.
+- **Credits:** $1 and $5 prepaid packs are available. At the current Page Pack price, $1 covers 2,000 calls before credits are used on other tools; service-wide daily capacity limits below still apply. There is no automatic paid fallback or top-up.
+
+Prefer publisher-provided Markdown or an official API when available. Page Pack does not fetch arbitrary URLs, render JavaScript, verify facts or guarantee token savings. Source text remains untrusted; small inputs can grow after JSON metadata. Token estimates use UTF-8 bytes divided by four, not a model tokenizer.
+
+### Try a free HTTP preview
+
+Save this synthetic example as `page.json`:
+
+```json
+{"html":"<html><head><title>Retry guide</title></head><body><nav>Home Account Ads</nav><main><h1>Retry guide</h1><p>Requests time out after 30 seconds. Retry only idempotent requests.</p><pre>GET /v1/items</pre></main></body></html>","sourceUrl":"https://example.com/retry-guide","maxChars":3000}
+```
+
+```sh
+curl --fail-with-body 'https://agent-utilities.agent-utilities.workers.dev/v1/preview/web.page-pack' \
+  -H 'Content-Type: application/json' --data-binary @page.json
+```
+
+The free preview removes the example's navigation and retains its timeout guidance and code sample. Check `chargedMicroUsd`, `result.content`, `result.truncated` and `result.measurement`. This is a synthetic demonstration, not a customer result.
+
+For MCP, connect to `https://agent-utilities.agent-utilities.workers.dev/mcp/remote?category=web` and call `agent_utilities_page_pack_preview` with the same input. For larger inputs or longer output, read the [paid contract](https://agent-utilities.agent-utilities.workers.dev/v1/content/tools/web.page-pack?utm_source=github) and explicitly authorize execution. HTTP paid calls require a private API key, a stable `Idempotency-Key` and can use `X-Max-Credit-Micro-Usd: 500` to cap a new call at $0.0005. A per-call ceiling is not a total session budget; follow the recovery instructions below after uncertainty.
+
+### For SEO agencies
+
+Try the [free SEO audit](https://agent-utilities.agent-utilities.workers.dev/seo?utm_source=github). It is a separate free entry point; the paid Page Pack capacity described above is for supplied-HTML extraction.
+
+The [live catalog](https://agent-utilities.agent-utilities.workers.dev/v1/content/index?utm_source=github) currently contains **49 paid tools**, separate from free resources and previews. Verified on October 4, 2026: the hosted MCP server reports **1.9.0**; this repository's local stdio adapter and immutable MCPB release remain **0.3.0**. These are separate components, not interchangeable version numbers.
+
 ## Pay per call with USDC
 
 For agents with a Circle Gateway balance, a separate [standalone USDC client](https://agent-utilities.agent-utilities.workers.dev/integrations/crypto?utm_source=github) supports Base mainnet payments without a Stripe credit pack. [Download and preview the example](https://github.com/cgvhbjk/agent-utilities-mcp/tree/main/examples/crypto). It pins network and contracts, caps each call, and saves signed requests privately for recovery. Preview is offline; preparation and submission require separate explicit commands. Real execution spends real USDC. This client is separate from the Stripe-funded MCP adapter and is not included in the immutable MCPB 0.3.0 release.
