@@ -9,6 +9,54 @@ Connect a local stdio MCP client to the current catalog of paid utility APIs for
 
 VS Code users: [open the setup link and private-key configuration](https://agent-utilities.agent-utilities.workers.dev/integrations/mcp?utm_source=github#vscode). [Detailed instructions](https://github.com/cgvhbjk/agent-utilities-mcp/blob/main/VSCODE.md) are included in this source repository.
 
+## Connect the hosted MCP in Cursor or VS Code
+
+No local Node.js process is needed. These setup links contain only the server name and public endpoint, with no API key or payment authorization:
+
+- [Set up hosted Agent Utilities in Cursor](https://cursor.com/en/install-mcp?name=agent-utilities-hosted&config=eyJ1cmwiOiJodHRwczovL2FnZW50LXV0aWxpdGllcy5hZ2VudC11dGlsaXRpZXMud29ya2Vycy5kZXYvbWNwL3JlbW90ZSJ9)
+- [Set up hosted Agent Utilities in VS Code](https://vscode.dev/redirect/mcp/install?name=agent-utilities-hosted&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fagent-utilities.agent-utilities.workers.dev%2Fmcp%2Fremote%22%7D)
+
+Review the configuration in your installed, MCP-capable application before accepting it. Inspect the installation scope and keep tool approvals enabled. These links configure the hosted connection, not the local adapter described elsewhere in this README.
+
+**Endpoint:** `https://agent-utilities.agent-utilities.workers.dev/mcp/remote` (Streamable HTTP). The separate legacy `/mcp` JSON-RPC endpoint has different behavior and is not the endpoint used by these setups.
+
+**Free versus paid:** discovery, supplied-data previews and `agent_utilities_seo_audit` need no Agent Utilities account or API key. The free SEO audit operates on supplied snapshots; it does not crawl arbitrary URLs. The 49 paid catalog tools require existing service credits and a private `Authorization: Bearer` API-key header, plus the prepared input, request ID and price ceiling described in the [hosted MCP guide](https://agent-utilities.agent-utilities.workers.dev/v1/content/docs/remote-mcp). This setup does not create an account, buy credits or grant approval to spend. No OAuth is provided. Never put an API key in an install link, shared configuration or chat.
+
+### Manual setup if a link does not open
+
+Merge the appropriate server entry into your existing configuration; preserve other servers.
+
+**Cursor:** use `.cursor/mcp.json` for this project, or `~/.cursor/mcp.json` for your user-wide configuration.
+
+```json
+{
+  "mcpServers": {
+    "agent-utilities-hosted": {
+      "url": "https://agent-utilities.agent-utilities.workers.dev/mcp/remote"
+    }
+  }
+}
+```
+
+**VS Code:** run **MCP: Open User Configuration** for the current user profile and merge this native VS Code format. For a workspace-only native configuration, use `.vscode/mcp.json`. Current VS Code also supports portable `.mcp.json`; consult its documentation before choosing a format.
+
+```json
+{
+  "servers": {
+    "agent-utilities-hosted": {
+      "type": "http",
+      "url": "https://agent-utilities.agent-utilities.workers.dev/mcp/remote"
+    }
+  }
+}
+```
+
+After reviewing and enabling the connection, inspect its discovered tools. Start with a free supplied-data preview or the [free SEO example and contract](https://agent-utilities.agent-utilities.workers.dev/v1/content/docs/seo-audit). Installation scope, organization policies and agent-session support depend on your client.
+
+**Verification:** install-link payloads were decoded and checked against these configurations on October 4, 2026. Focused server tests passed using the official MCP SDK's Streamable HTTP client, including free SEO behavior. Actual Cursor/VS Code application installation and model-driven execution have not been tested; no marketplace listing or endorsement is claimed.
+
+References: [Cursor installation links](https://cursor.com/docs/mcp/install-links), [Cursor MCP configuration](https://cursor.com/docs/mcp), [VS Code installation URLs](https://code.visualstudio.com/api/extension-guides/ai/mcp), [Microsoft's remote-HTTP install-link example](https://github.com/MicrosoftDocs/mcp), [VS Code configuration and scope](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
+
 ## Turn supplied HTML into compact research inputs
 
 [Page Pack](https://agent-utilities.agent-utilities.workers.dev/products/page-pack?utm_source=github) extracts bounded readable content from HTML you already have, with its source URL, truncation flags and size estimates. Use it to prepare captured documentation or page content for an agent, then inspect the output and retain the original source.
