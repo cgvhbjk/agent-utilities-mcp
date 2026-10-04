@@ -22,7 +22,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://agent-utilities.agent-utilities.workers.dev/mcp"
+      "url": "https://agent-utilities.agent-utilities.workers.dev/mcp/remote"
     }
   ]
 }
